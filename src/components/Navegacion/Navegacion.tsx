@@ -17,8 +17,12 @@ class Navegacion extends React.Component<INavegacionProps> {
 
   render() {
     const { isAuthenticated } = this.props.auth;
+    const isLogged = localStorage.getItem('isLoggedIn');
+    console.log(`Navegacion: ${isLogged}`);
+    console.log(`Navegación: ${isAuthenticated()}`);
     let resultado;
-    if (isAuthenticated()) {
+    // if (isAuthenticated()) {
+    if (isLogged) {
       resultado = <a onClick={this.cerrarSesion}>Cerrar Sesión</a>;
     } else {
       resultado = <a onClick={this.iniciarSesion}>Iniciar Sesión</a>;

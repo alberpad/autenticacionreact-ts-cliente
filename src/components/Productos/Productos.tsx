@@ -14,8 +14,8 @@ interface IProductosState {
   productos: IProductoData[];
   terminoBusqueda: string;
 }
-class Productos extends Component<IProductosProps> {
-  state = {
+class Productos extends Component<IProductosProps, IProductosState> {
+  state: IProductosState = {
     productos: [],
     terminoBusqueda: ''
   };
@@ -26,7 +26,7 @@ class Productos extends Component<IProductosProps> {
   queryAPI = async () => {
     const { getAccessToken } = this.props.auth;
     const headers = { Authorization: `Bearer ${getAccessToken()}` };
-    const url = 'http://localhost:5000/productos';
+    const url = 'http://localhost:3001/productos';
     const response = await axios.get(url, { headers });
     this.setState({
       productos: response.data
@@ -38,14 +38,30 @@ class Productos extends Component<IProductosProps> {
   };
 
   busquedaProducto = (busqueda: string) => {
-    if (busqueda.length > 2) {
+    if (busqueda.length > 3) {
+      let productos = [...this.state.productos];
+      let resultado: any[];
+      !busqueda
+        ? (resultado = productos)
+        : (resultado = productos.filter(
+            (producto: IProductoData) =>
+              producto.nombre.toLowerCase().indexOf(busqueda.toLowerCase()) !==
+              -1
+          ));
+
       this.setState({
-        terminoBusqueda: busqueda
+        terminoBusqueda: busqueda,
+        productos: resultado
       });
     } else {
-      this.setState({
-        terminoBusqueda: ''
-      });
+      this.setState(
+        {
+          terminoBusqueda: ''
+        },
+        () => {
+          this.queryAPI();
+        }
+      );
     }
   };
 

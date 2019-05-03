@@ -9,7 +9,6 @@ import history from '../history';
 // Componentes propios
 import Productos from './Productos/Productos';
 import Nosotros from './Nosotros/Nosotros';
-import Error from './Error/Error';
 import Header from './Header/Header';
 import VerProducto from './VerProducto/VerProducto';
 import Navegacion from './Navegacion/Navegacion';
@@ -60,7 +59,11 @@ export const makeMainRoutes = () => {
             );
           }}
         /> */}
-        <Route exact path="/contacto" render={(props) => <Contacto />} />
+        <Route
+          exact
+          path="/contacto"
+          render={(props) => <Contacto auth={auth} {...props} />}
+        />
         <Route
           path="/callback"
           render={(props) => {
